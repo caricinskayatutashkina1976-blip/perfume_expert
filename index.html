@@ -149,10 +149,21 @@
     }
 
     .hero h2 {
-      margin: 0 0 1rem;
+      margin: 0 0 0.65rem;
       font-size: clamp(1.5rem, 5vw, 2rem);
       font-weight: 400;
       line-height: 1.3;
+    }
+
+    /* Короткий усиливающий слоган под заголовком hero */
+    .hero-tagline {
+      margin: 0 auto 1.15rem;
+      max-width: 26rem;
+      font-size: clamp(0.98rem, 2.5vw, 1.12rem);
+      line-height: 1.55;
+      color: var(--text-muted);
+      font-style: italic;
+      letter-spacing: 0.03em;
     }
 
     .hero-desc {
@@ -292,13 +303,12 @@
       margin-top: 1.5rem;
     }
 
-    /* Блок результатов */
+    /* Блок результатов: скрыт до первой подборки (и атрибут hidden в разметке) */
     .results {
-      display: none;
       margin-top: 2.5rem;
     }
 
-    .results.visible {
+    .results.visible:not([hidden]) {
       display: block;
       animation: fadeIn 0.6s ease;
     }
@@ -681,6 +691,7 @@
     <section class="hero" id="hero">
       <span class="hero-badge">Демо-консультант</span>
       <h2>Ваш персональный подбор в духе luxury-бутика</h2>
+      <p class="hero-tagline">Создайте свой ароматический образ — от повседневного звучания до вечернего шлейфа.</p>
       <p class="hero-desc">
         Опишите любимый аромат, бренд или пирамиду нот — и получите структурированный ответ:
         анализ, десять направлений для знакомства и парфюмерный гардероб под разные случаи жизни.
@@ -707,25 +718,25 @@
           <div class="form-grid two">
             <div>
               <label for="favName">Название любимого аромата</label>
-              <input type="text" id="favName" name="favName" placeholder="Например: Shalimar">
+              <input type="text" id="favName" name="favName" placeholder="Например, Baccarat Rouge 540">
             </div>
             <div>
               <label for="brand">Бренд</label>
-              <input type="text" id="brand" name="brand" placeholder="Например: Guerlain">
+              <input type="text" id="brand" name="brand" placeholder="Например, Maison Francis Kurkdjian">
             </div>
           </div>
 
           <div>
             <label for="topNotes">Верхние ноты</label>
-            <input type="text" id="topNotes" name="topNotes" placeholder="Цитрус, бергамот…">
+            <input type="text" id="topNotes" name="topNotes" placeholder="шафран, жасмин">
           </div>
           <div>
             <label for="heartNotes">Сердце аромата</label>
-            <input type="text" id="heartNotes" name="heartNotes" placeholder="Ирис, роза…">
+            <input type="text" id="heartNotes" name="heartNotes" placeholder="амбра, древесные ноты">
           </div>
           <div>
             <label for="baseNotes">База аромата</label>
-            <input type="text" id="baseNotes" name="baseNotes" placeholder="Ваниль, сандал…">
+            <input type="text" id="baseNotes" name="baseNotes" placeholder="кедр, мускус">
           </div>
 
           <div>
@@ -764,8 +775,8 @@
       </form>
     </section>
 
-    <!-- Результаты: заполняются скриптом после отправки формы -->
-    <section class="results" id="results" aria-live="polite">
+    <!-- Результаты: hidden до нажатия «Получить подборку»; снимается скриптом -->
+    <section class="results" id="results" hidden aria-hidden="true" aria-live="polite">
       <h2 class="section-title">Ваша подборка</h2>
 
       <div class="results-toolbar">
@@ -1364,6 +1375,8 @@
       lastPlainRecommendation = composePlainRecommendation(data, analysisParts, similar, wardrobe, finalText, aromaText);
 
       const results = document.getElementById("results");
+      results.removeAttribute("hidden");
+      results.setAttribute("aria-hidden", "false");
       results.classList.add("visible");
       results.scrollIntoView({ behavior: "smooth", block: "start" });
     });
@@ -1376,6 +1389,8 @@
       lastPlainRecommendation = "";
       const results = document.getElementById("results");
       results.classList.remove("visible");
+      results.setAttribute("hidden", "");
+      results.setAttribute("aria-hidden", "true");
       document.getElementById("outAnalysis").innerHTML = "";
       document.getElementById("outSimilar").innerHTML = "";
       document.getElementById("outWardrobe").innerHTML = "";
