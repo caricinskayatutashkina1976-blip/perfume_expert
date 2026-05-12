@@ -396,7 +396,11 @@
       margin-top: 1.5rem;
     }
 
-    /* Блок результатов: скрыт до первой подборки (и атрибут hidden в разметке) */
+    /* Блок результатов: скрыт до первой подборки (атрибут hidden + явное display для всех браузеров) */
+    .results[hidden] {
+      display: none !important;
+    }
+
     .results {
       margin-top: 2.5rem;
     }
@@ -1485,7 +1489,7 @@
       lastPlainRecommendation = composePlainRecommendation(data, analysisParts, similar, wardrobe, finalText, aromaText);
 
       const results = document.getElementById("results");
-      results.removeAttribute("hidden");
+      results.hidden = false;
       results.setAttribute("aria-hidden", "false");
       results.classList.add("visible");
       results.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1499,7 +1503,7 @@
       lastPlainRecommendation = "";
       const results = document.getElementById("results");
       results.classList.remove("visible");
-      results.setAttribute("hidden", "");
+      results.hidden = true;
       results.setAttribute("aria-hidden", "true");
       document.getElementById("outAnalysis").innerHTML = "";
       document.getElementById("outSimilar").innerHTML = "";
