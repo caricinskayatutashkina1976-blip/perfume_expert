@@ -319,56 +319,186 @@
     }
 
     .analysis-box {
-      padding: 1.25rem;
-      border-radius: 14px;
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      font-size: 1rem;
+      padding: 0;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
 
-    /* Список из 10 ароматов */
+    .analysis-lead {
+      margin: 0;
+      padding: 1.15rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+
+    /* Сетка экспертного анализа: подпись + текст */
+    .analysis-grid {
+      display: grid;
+      gap: 0;
+    }
+
+    @media (min-width: 560px) {
+      .analysis-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .analysis-cell {
+      padding: 1rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid transparent;
+    }
+
+    @media (min-width: 560px) {
+      .analysis-cell:nth-child(2n) {
+        border-right: none;
+      }
+    }
+
+    .analysis-cell:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    @media (max-width: 559px) {
+      .analysis-cell:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .analysis-label {
+      display: block;
+      font-family: system-ui, sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .analysis-cell p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    /* Список из 10 ароматов — карточки luxury */
     .perfume-list {
       list-style: none;
       margin: 0;
       padding: 0;
       display: grid;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     .perfume-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.85rem;
-      padding: 1rem;
-      border-radius: 12px;
+      position: relative;
+      padding: 1.15rem 1.15rem 1.15rem 1.15rem;
+      padding-left: 3.5rem;
+      border-radius: 16px;
       border: 1px solid var(--border);
-      background: var(--bg-card);
+      background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg) 100%);
       box-shadow: var(--shadow);
+      transition: box-shadow 0.25s ease;
+    }
+
+    .perfume-item:hover {
+      box-shadow: var(--shadow-hover);
     }
 
     .perfume-num {
-      flex-shrink: 0;
-      width: 2rem;
-      height: 2rem;
+      position: absolute;
+      left: 1rem;
+      top: 1.15rem;
+      width: 2.15rem;
+      height: 2.15rem;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: system-ui, sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: #1a1208;
       background: var(--gold-gradient);
+      box-shadow: 0 2px 12px rgba(184, 134, 11, 0.25);
     }
 
-    .perfume-item strong {
-      display: block;
-      font-size: 1rem;
+    .perfume-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 0.75rem;
+      margin-bottom: 0.45rem;
     }
 
-    .perfume-item small {
+    .perfume-brand {
+      font-family: system-ui, sans-serif;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
       color: var(--text-muted);
-      font-size: 0.85rem;
+    }
+
+    .perfume-name {
+      font-size: 1.12rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      margin: 0;
+      flex: 1 1 100%;
+    }
+
+    .tag-pill {
+      display: inline-block;
+      font-family: system-ui, sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .perfume-blurb {
+      margin: 0 0 0.85rem;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    .perfume-meta {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .meta-row {
+      font-size: 0.86rem;
+      line-height: 1.5;
+      padding-left: 0.65rem;
+      border-left: 2px solid var(--accent);
+    }
+
+    .meta-row strong {
+      font-family: system-ui, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.15rem;
     }
 
     /* Сетка гардероба */
@@ -380,6 +510,12 @@
     @media (min-width: 640px) {
       .wardrobe-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 960px) {
+      .wardrobe-grid {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
@@ -407,6 +543,87 @@
       border: 1px solid var(--accent);
       box-shadow: var(--shadow-hover);
       font-size: 1.05rem;
+    }
+
+    .aroma-image-block {
+      padding: 1.75rem 1.5rem;
+      border-radius: 18px;
+      background: linear-gradient(160deg, var(--accent-soft) 0%, var(--bg-card) 45%, var(--bg-card) 100%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .aroma-image-block .aroma-text {
+      margin: 0;
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      line-height: 1.75;
+      font-style: italic;
+      color: var(--text);
+    }
+
+    .results-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .btn-ghost {
+      font-family: system-ui, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.75rem 1.35rem;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--text);
+      background: transparent;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Тост после копирования */
+    .copy-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 200;
+      font-family: system-ui, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--accent);
+      box-shadow: var(--shadow-hover);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .copy-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
     }
 
     /* Автор */
@@ -539,6 +756,10 @@
 
         <div class="submit-wrap">
           <button type="submit" class="btn-primary sans">Получить подборку</button>
+          <div class="form-actions">
+            <!-- type="button" — не отправляет форму; сбрасывает поля через скрипт -->
+            <button type="button" class="btn-ghost sans" id="clearFormBtn">Очистить форму</button>
+          </div>
         </div>
       </form>
     </section>
@@ -547,9 +768,13 @@
     <section class="results" id="results" aria-live="polite">
       <h2 class="section-title">Ваша подборка</h2>
 
+      <div class="results-toolbar">
+        <button type="button" class="btn-ghost sans" id="copyRecBtn">Скопировать рекомендацию</button>
+      </div>
+
       <div class="result-block">
         <h3>Анализ аромата</h3>
-        <div class="analysis-box card" id="outAnalysis"></div>
+        <div class="analysis-box" id="outAnalysis"></div>
       </div>
 
       <div class="result-block">
@@ -566,7 +791,15 @@
         <h3>Итоговая рекомендация</h3>
         <div class="final-rec" id="outFinal"></div>
       </div>
+
+      <div class="result-block">
+        <h3>Ваш ароматический образ</h3>
+        <div class="aroma-image-block" id="outAromaImage"></div>
+      </div>
     </section>
+
+    <!-- Всплывающее сообщение после копирования (показывается скриптом) -->
+    <div class="copy-toast sans" id="copyToast" role="status" aria-live="polite" aria-hidden="true"></div>
 
     <!-- Блок об авторе сервиса -->
     <section class="author">
@@ -635,39 +868,43 @@
       В реальном проекте сюда пришёл бы ответ API.
     */
     const SIMILAR_POOL = [
-      { name: "Samsara", brand: "Guerlain", note: "пудровый сандал и специи" },
-      { name: "Coco Mademoiselle", brand: "Chanel", note: "цитрус, пачули, роза" },
-      { name: "La Nuit de L'Homme", brand: "Yves Saint Laurent", note: "лаванда, кардамон, ваниль" },
-      { name: "Terre d'Hermès", brand: "Hermès", note: "апельсин, минералы, древесина" },
-      { name: "Black Orchid", brand: "Tom Ford", note: "трюфель, шоколад, орхидея" },
-      { name: "Bleu de Chanel", brand: "Chanel", note: "цитрус, ладан, кедр" },
-      { name: "J'adore", brand: "Dior", note: "юланг, жасмин, фрукты" },
-      { name: "Sauvage", brand: "Dior", note: "бергамот, амброксан, перец" },
-      { name: "Libre", brand: "Yves Saint Laurent", note: "лаванда, апельсин, ваниль" },
-      { name: "Angel", brand: "Mugler", note: "пачули, карамель, пачули" },
-      { name: "Acqua di Gio", brand: "Giorgio Armani", note: "морской воздух, жасмин, мускус" },
-      { name: "Flowerbomb", brand: "Viktor & Rolf", note: "роза, фрезия, пачули" },
-      { name: "Aventus", brand: "Creed", note: "ананас, дым, дубовый мох" },
-      { name: "Narciso Rodriguez For Her", brand: "Narciso Rodriguez", note: "мускус, роза, кашемировое дерево" },
-      { name: "L'Interdit", brand: "Givenchy", note: "тубероза, жасмин, ветивер" },
-      { name: "Good Girl", brand: "Carolina Herrera", note: "миндаль, какао, тонка" },
-      { name: "Spicebomb", brand: "Viktor & Rolf", note: "перец, табак, кожа" },
-      { name: "Oud Wood", brand: "Tom Ford", note: "oud, сандал, ваниль" },
-      { name: "Miss Dior", brand: "Dior", note: "роза, пачули, мускус" },
-      { name: "Allure Homme Sport", brand: "Chanel", note: "мандарин, кедр, тонка" },
-      { name: "Mon Guerlain", brand: "Guerlain", note: "лаванда, ваниль, сандал" },
-      { name: "Gentle Fluidity Gold", brand: "Maison Francis Kurkdjian", note: "мускус, ваниль, корица" },
-      { name: "Baccarat Rouge 540", brand: "Maison Francis Kurkdjian", note: "шафран, амброксан, кедр" },
-      { name: "Philosykos", brand: "Diptyque", note: "инжир, листья, древесина" },
-      { name: "Gypsy Water", brand: "Byredo", note: "сосна, сандал, ваниль" }
+      { name: "Samsara", brand: "Guerlain", note: "пудровый сандал и специи", desc: "Восточная глубина с пудровым свечением и благородной дистанцией.", tag: "древесный" },
+      { name: "Coco Mademoiselle", brand: "Chanel", note: "цитрус, пачули, роза", desc: "Шик urban-chic: яркое открытие и чувственное древесно-пачуловое дно.", tag: "цветочный" },
+      { name: "La Nuit de L'Homme", brand: "Yves Saint Laurent", note: "лаванда, кардамон, ваниль", desc: "Контраст прохлады и тёплой ванили — вечерний характер без крика.", tag: "мускусный" },
+      { name: "Terre d'Hermès", brand: "Hermès", note: "апельсин, минералы, древесина", desc: "Минеральная честность и сухая древесина — эталон зрелой мужской линии.", tag: "древесный" },
+      { name: "Black Orchid", brand: "Tom Ford", note: "трюфель, шоколад, орхидея", desc: "Театральная гурманика и тёмные цветы для особого выхода.", tag: "гурманский" },
+      { name: "Bleu de Chanel", brand: "Chanel", note: "цитрус, ладан, кедр", desc: "Свежесть с деловым хребтом: универсально, но дорого по подаче.", tag: "свежий" },
+      { name: "J'adore", brand: "Dior", note: "юланг, жасмин, фрукты", desc: "Солнечный цветочный коктейль с золотистым сиянием кожи.", tag: "цветочный" },
+      { name: "Sauvage", brand: "Dior", note: "бергамот, амброксан, перец", desc: "Магнитная свежесть и радиус присутствия — современная классика.", tag: "свежий" },
+      { name: "Libre", brand: "Yves Saint Laurent", note: "лаванда, апельсин, ваниль", desc: "Лаванда как украшение и сладковатое сердце — феминность с характером.", tag: "цветочный" },
+      { name: "Angel", brand: "Mugler", note: "пачули, карамель", desc: "Культовая гурманика: смелость, узнаваемость и долгая память об образе.", tag: "гурманский" },
+      { name: "Acqua di Gio", brand: "Giorgio Armani", note: "морской воздух, жасмин, мускус", desc: "Морской ветер и чистая кожа — лёгкость без упрощения.", tag: "свежий" },
+      { name: "Flowerbomb", brand: "Viktor & Rolf", note: "роза, фрезия, пачули", desc: "Цветочная волна с пачулевым якорем — романтика с плотностью.", tag: "цветочный" },
+      { name: "Aventus", brand: "Creed", note: "ананас, дым, дубовый мох", desc: "Фруктово-древесный драматизм и статусное звучание в шлейфе.", tag: "древесный" },
+      { name: "Narciso Rodriguez For Her", brand: "Narciso Rodriguez", note: "мускус, роза, кашемировое дерево", desc: "Чистая линия мускуса и кашемировой розы — интимная геометрия.", tag: "мускусный" },
+      { name: "L'Interdit", brand: "Givenchy", note: "тубероза, жасмин, ветивер", desc: "Белые цветы с тёмным контуром — вечерняя уверенность.", tag: "цветочный" },
+      { name: "Good Girl", brand: "Carolina Herrera", note: "миндаль, какао, тонка", desc: "Высокий каблук в нотах: гурманская соблазнительность и контраст.", tag: "гурманский" },
+      { name: "Spicebomb", brand: "Viktor & Rolf", note: "перец, табак, кожа", desc: "Специи и кожа — плотный силуэт для холодной погоды и вечера.", tag: "кожаный" },
+      { name: "Oud Wood", brand: "Tom Ford", note: "oud, сандал, ваниль", desc: "Редкостная древесина и тёплый шёлк ванили — дорогой минимализм.", tag: "древесный" },
+      { name: "Miss Dior", brand: "Dior", note: "роза, пачули, мускус", desc: "Современная роза с пудрой и лёгкой гурманикой — дневная элегантность.", tag: "цветочный" },
+      { name: "Allure Homme Sport", brand: "Chanel", note: "мандарин, кедр, тонка", desc: "Спортивная свежесть с кедровой стойкостью — активный день.", tag: "свежий" },
+      { name: "Mon Guerlain", brand: "Guerlain", note: "лаванда, ваниль, сандал", desc: "Лавандово-ванильная одушевлённость — мягкая сила и уют.", tag: "гурманский" },
+      { name: "Gentle Fluidity Gold", brand: "Maison Francis Kurkdjian", note: "мускус, ваниль, корица", desc: "Золотой свет специй и мускуса — утончённая гурманика.", tag: "гурманский" },
+      { name: "Baccarat Rouge 540", brand: "Maison Francis Kurkdjian", note: "шафран, амброксан, кедр", desc: "Прозрачная сладость и минеральный блеск — узнаваемый DNA.", tag: "мускусный" },
+      { name: "Philosykos", brand: "Diptyque", note: "инжир, листья, древесина", desc: "Молочный инжир и зелень — средиземноморская чистота.", tag: "свежий" },
+      { name: "Gypsy Water", brand: "Byredo", note: "сосна, сандал, ваниль", desc: "Костёр, смола и ваниль — богемный шик и тёплый шлейф.", tag: "древесный" },
+      { name: "Tuscan Leather", brand: "Tom Ford", note: "малина, шафран, кожа", desc: "Кожа малинового оттенка — дерзость в рамках luxury.", tag: "кожаный" },
+      { name: "Portrait of a Lady", brand: "Frédéric Malle", note: "роза, ладан, пачули", desc: "Плотная восточная роза — вечер, пальто, уверенный жест.", tag: "цветочный" },
+      { name: "Layton", brand: "Parfums de Marly", note: "яблоко, лаванда, ваниль", desc: "Свежесть яблока и ванильная опушка — современный дворцовый штрих.", tag: "свежий" }
     ];
 
     const WARDROBE_LABELS = [
-      { key: "work", label: "Аромат для работы" },
-      { key: "business", label: "Аромат для деловых встреч" },
-      { key: "walk", label: "Аромат для прогулок" },
-      { key: "travel", label: "Аромат для путешествий" },
-      { key: "event", label: "Аромат для мероприятий" }
+      { key: "daily", label: "На каждый день" },
+      { key: "work", label: "Для работы" },
+      { key: "business", label: "Для деловых встреч" },
+      { key: "date", label: "Для свиданий" },
+      { key: "travel", label: "Для путешествий" },
+      { key: "evening", label: "Для вечернего выхода" }
     ];
 
     /** Простая «хэш-функция» от строки — даёт стабильное число для выбора вариантов */
@@ -693,37 +930,209 @@
       return copy;
     }
 
-    /** Вступление к анализу с правильным согласованием по гендеру */
-    function genderAnalysisOpening(gender, ref, brandSuffix) {
+    /** Последняя полная рекомендация в виде текста — для копирования в буфер */
+    let lastPlainRecommendation = "";
+
+    /** Выбор стабильного варианта из массива строк (демо-«экспертиза») */
+    function pickStable(arr, seedKey, salt) {
+      if (!arr || !arr.length) return "";
+      const idx = hashString(seedKey + String(salt)) % arr.length;
+      return arr[idx];
+    }
+
+    /** Вступление к анализу; ref и brand уже экранированы для HTML */
+    function genderAnalysisOpeningHtml(gender, refEscaped, brandSuffixEscaped) {
       let niche;
       if (gender === "мужской") niche = "В мужской нише";
       else if (gender === "унисекс") niche = "В унисекс-сегменте";
       else niche = "В женской нише";
-      return niche + " референс «" + ref + "»" + brandSuffix + " воспринимается";
+      return niche + " референс «" + refEscaped + "»" + brandSuffixEscaped + " воспринимается";
     }
 
-    /** Собирает текст анализа из полей формы и шаблонов */
-    function buildAnalysis(data) {
-      const scentLine = [data.topNotes, data.heartNotes, data.baseNotes].filter(Boolean).join(" → ");
-      const ref = data.favName || "ваш эталонный образ";
-      const br = data.brand ? " (" + data.brand + ")" : "";
-      const style = data.style;
-      const occ = data.occasion;
-      const opening = genderAnalysisOpening(data.gender, ref, br);
+    /** Шаблоны для блока анализа — настроение по стилю из анкеты */
+    const MOODS_BY_STYLE = {
+      свежий: ["солнечная ясность и ощущение чистого листа", "лёгкое сияние, как после душа и хорошего сна", "динамика цитруса без назойливости"],
+      сладкий: ["тёплое облако ванили и уверенность в своём шарме", "соблазнительная мягкость с «вкусным» сердцем", "романтика сладкой дымки на коже"],
+      древесный: ["сухая элегантность и спокойная сила", "архитектурная выдержка и зрелый силуэт", "тихая роскошь древесины и смолы"],
+      мускусный: ["«вторая кожа» — интимность и чистота линии", "магнетизм близкой дистанции", "современная чувственность без декораций"],
+      цветочный: ["сад в полном цвету — женственность и свет", "бархатные лепестки и золотой час дня", "поэзия букета с утончённой опорой в базе"],
+      гурманский: ["съедобная глубина — уют и смелость одновременно", "десертный шлейф с дорогой подачей", "гурманика как украшение, а не крик"],
+      кожаный: ["строгий шик и характер без компромиссов", "кожаный портфель, такси и вечерний город", "дерзость в рамках безупречного вкуса"]
+    };
 
-      let pyramid = "";
-      if (scentLine) {
-        pyramid = `Пирамида, которую вы описали (${scentLine}), задаёт характер: композиция читается в парадигме «${style}» с акцентом на сценарий «${occ}». `;
+    const CHAR_BY_STYLE = {
+      свежий: ["собранный, динамичный, с лёгкой иронией в жесте", "энергичный интроверт: много воздуха в образе", "человек, который ценит чистоту линии"],
+      сладкий: ["теплый, открытый, с тактильным обаянием", "романтик с чувством меры", "уверенность через мягкость"],
+      древесный: ["выдержанный, стратегичный, с долгим «хвостом» решений", "архитектор своего дня", "спокойная харизма без лишних слов"],
+      мускусный: ["минималист в деталях, экспрессивный в шлейфе", "современный, чистый, запоминающийся", "ценитель близкой дистанции"],
+      цветочный: ["изящный, эмоциональный, с художественным вкусом", "свет в комнате — само собой", "классическая элегантность в новом прочтении"],
+      гурманский: ["смелый, чувственный, с аппетитом к жизни", "любитель тактильных удовольствий", "хозяин вечера без громких жестов"],
+      кожаный: ["харизматичный, статусный, с внутренним стержнем", "вечерний город как естественная среда", "уверенность в одном распылении"]
+    };
+
+    const SEASON_HINTS = [
+      "весна и ранняя осень — идеальный баланс света и воздуха",
+      "зима и вечер — когда база раскрывается глубже",
+      "лето: лёгкий слой и обновление в течение дня",
+      "круглый год при умеренной дозировке и правильном слое одежды",
+      "прохладные месяцы — для максимальной выразительности пирамиды"
+    ];
+
+    const TRAIL_HINTS = [
+      "интимный шлейф — читается ближе полуметра, элегантно в офисе",
+      "умеренный шлейф — деликатный след в коридоре и лифте",
+      "выразительный шлейф — заметный, требует дозировки в тесных пространствах",
+      "воздушный шлейф — лёгкое облако, которое не «давит» на расстоянии",
+      "шлейф «дорогого бутика» — плотность в первый час, затем благородное прилипание к коже"
+    ];
+
+    const LONGEVITY_HINTS = [
+      "ориентир 4–6 часов на коже; обновление к вечеру при длинном дне",
+      "6–8 часов устойчивого звучания при нанесении на пульс и волосы",
+      "до 10 часов на одежде и воротнике — база «держит» силуэт",
+      "стойкость средняя+: лучше проверить развитие на вашей коже дважды в день",
+      "долгоиграющая база — важна экономная доза при первом нанесении"
+    ];
+
+    const PERSONA_BY_GENDER = {
+      женский: [
+        "женщине с безупречным вкусом, которая любит, когда аромат дополняет, а не заменяет её присутствие",
+        "образу «тихой роскоши»: ухоженность, дистанция, внимание к деталям",
+        "тем, кто выбирает силуэт аромата как часть персонального бренда"
+      ],
+      мужской: [
+        "мужчине с дисциплиной в деталях и уверенностью без крика",
+        "образу зрелого минимализма: чистая линия, хороший крой, верный шлейф",
+        "тем, кто ценит стойкость и «дорогую» сдержанность"
+      ],
+      унисекс: [
+        "тем, кто строит образ вне жёстких рамок и ценит универсальную элегантность",
+        "любителям gender-neutral линий с чётким характером",
+        "тем, кто носит парфюм как завершение стиля, а не как аксессуар-громкоговоритель"
+      ]
+    };
+
+    /** Собирает структуру экспертного анализа (объект с полями для экрана и для копирования) */
+    function buildExpertAnalysis(data) {
+      const seedKey = [data.favName, data.brand, data.style, data.occasion, data.gender].join("|");
+      const moods = MOODS_BY_STYLE[data.style] || MOODS_BY_STYLE.цветочный;
+      const chars = CHAR_BY_STYLE[data.style] || CHAR_BY_STYLE.цветочный;
+      const personas = PERSONA_BY_GENDER[data.gender] || PERSONA_BY_GENDER.унисекс;
+
+      const refRaw = data.favName || "ваш эталонный образ";
+      const brandSuffixRaw = data.brand ? " (" + data.brand + ")" : "";
+      const scentLineRaw = [data.topNotes, data.heartNotes, data.baseNotes].filter(Boolean).join(" → ");
+
+      let pyramidText = "";
+      if (scentLineRaw) {
+        pyramidText =
+          "Пирамида (" +
+          scentLineRaw +
+          ") задаёт вектор: в парадигме «" +
+          data.style +
+          "» с акцентом на сценарий «" +
+          data.occasion +
+          "». ";
       } else {
-        pyramid = `Без явной пирамиды мы опираемся на стиль «${style}» и сценарий «${occ}» — этого достаточно, чтобы наметить вектор. `;
+        pyramidText =
+          "Без описанной пирамиды опираемся на стиль «" +
+          data.style +
+          "» и сценарий «" +
+          data.occasion +
+          "» — этого достаточно для первого контура подбора. ";
       }
 
+      const leadHtml =
+        genderAnalysisOpeningHtml(data.gender, escapeHtml(refRaw), escapeHtml(brandSuffixRaw)) +
+        " в ключе стиля «" +
+        escapeHtml(data.style) +
+        "». " +
+        escapeHtml(pyramidText) +
+        "Ниже — направления для пробы на коже и гардероб под разные моменты жизни.";
+
+      return {
+        leadHtml: leadHtml,
+        mood: pickStable(moods, seedKey, "mood"),
+        character: pickStable(chars, seedKey, "char"),
+        season: pickStable(SEASON_HINTS, seedKey, "season"),
+        trail: pickStable(TRAIL_HINTS, seedKey, "trail"),
+        longevity: pickStable(LONGEVITY_HINTS, seedKey, "long"),
+        persona: pickStable(personas, seedKey, "persona"),
+        leadPlain: stripTags(leadHtml)
+      };
+    }
+
+    /** Убирает HTML из строки (для демо достаточно простой замены) */
+    function stripTags(html) {
+      const t = document.createElement("div");
+      t.innerHTML = html;
+      return t.textContent || "";
+    }
+
+    /** Рендерит разметку блока «Анализ аромата» */
+    function renderAnalysisHTML(parts) {
+      const cells = [
+        { label: "Настроение аромата", text: parts.mood },
+        { label: "Характер", text: parts.character },
+        { label: "Сезон", text: parts.season },
+        { label: "Шлейф", text: parts.trail },
+        { label: "Стойкость", text: parts.longevity },
+        { label: "Образ человека", text: "Подойдёт " + parts.persona + "." }
+      ];
+      let grid = '<div class="analysis-grid">';
+      for (let i = 0; i < cells.length; i++) {
+        grid +=
+          '<div class="analysis-cell"><span class="analysis-label">' +
+          escapeHtml(cells[i].label) +
+          "</span><p>" +
+          escapeHtml(cells[i].text) +
+          "</p></div>";
+      }
+      grid += "</div>";
       return (
-        opening + ` в ключе стиля «${style}». ` +
-        pyramid +
-        `В таком профиле важны баланс стойкости и дистанции: для ${occ} лучше выбирать композиции с читаемым силуэтом и без «шума» в базе. ` +
-        `Ниже — десять направлений для теста на коже и гардероб под ключевые ситуации — от офиса до вечера.`
+        '<p class="analysis-lead">' + parts.leadHtml + "</p>" + grid
       );
+    }
+
+    const WHEN_BY_TAG = {
+      свежий: "С утра и днём, после душа; в тёплый сезон — идеально. В офис — одно-два распыления.",
+      древесный: "Осень и зима, деловой день и вечер. Летом — экономнее по дозе.",
+      цветочный: "Дневные мероприятия, свидания, весна. Вечером — усильте нанесением на волосы.",
+      гурманский: "Вечер, холодная погода, ужин и театр. Днём — минимальный слой.",
+      мускусный: "Универсально по сезону; лучше всего раскрывается на чистой коже и ткани.",
+      кожаный: "Прохладная погода, вечер, мероприятия. В жару — только лёгкое касание."
+    };
+
+    const DIFF_PHRASES = [
+      "Отличается более сухой базой и меньшей сладостью в силуэте.",
+      "Смещает акцент с верха на сердце — другая драматургия раскрытия.",
+      "Ближе по духу, но спокойнее в шлейфе — «тихий» вариант той же идеи.",
+      "Другая подача: больше воздуха в открытии и плотнее в финале.",
+      "Отстройка по настроению: менее заметен издалека, глубже на коже.",
+      "Контрастирует яркостью верха — смелее в первые минуты, мягче в базе."
+    ];
+
+    /** Дополняет карточку похожего аромата текстами «чем похож / отличается / когда» */
+    function enrichSimilarItem(item, data, index) {
+      const seedKey = [data.favName, data.brand, item.name, index].join("|");
+      const similarText =
+        "Созвучен с вашим запросом в ключе «" +
+        data.style +
+        "»: слышится " +
+        item.note +
+        " — та же эмоциональная температура, что вы описали.";
+      const differentText = pickStable(DIFF_PHRASES, seedKey, "diff");
+      const whenText = WHEN_BY_TAG[item.tag] || pickStable(["Днём и вечером при умеренной дозе.", "Универсально: проверьте на коже утром и после заката."], seedKey, "when");
+      return {
+        name: item.name,
+        brand: item.brand,
+        note: item.note,
+        desc: item.desc,
+        tag: item.tag,
+        similarText: similarText,
+        differentText: differentText,
+        whenText: whenText
+      };
     }
 
     /** Возвращает 10 уникальных позиций из пула (с учётом seed от формы) */
@@ -735,18 +1144,18 @@
       return shuffled.slice(0, 10);
     }
 
-    /** Карточки гардероба — берём 5 разных ароматов из того же перемешанного пула */
+    /** Шесть слотов гардероба — шесть разных ароматов из перемешанного пула */
     function buildWardrobe(data) {
       const seed = hashString([data.brand, data.baseNotes, "wardrobe"].join("|"));
       const shuffled = shuffleWithSeed(SIMILAR_POOL, seed + 7);
-      const picks = shuffled.slice(0, 5);
+      const picks = shuffled.slice(0, 6);
       return WARDROBE_LABELS.map(function (item, i) {
         const p = picks[i] || SIMILAR_POOL[i];
         return {
           label: item.label,
           name: p.name,
           brand: p.brand,
-          hint: p.note
+          hint: p.desc || p.note
         };
       });
     }
@@ -754,23 +1163,74 @@
     function buildFinal(data, similarFirst) {
       const main = similarFirst[0];
       return (
-        `Стартовая точка для пробы: ${main.name} (${main.brand}) — близко к вашему запросу по настроению. ` +
-        `Учитывая сценарий «${data.occasion}» и стиль «${data.style}», наносите экономно на пульс и проверяйте развитие через 2–4 часа. ` +
-        `Если захотите углубить подбор с реальным AI — подключите API и замените функции генерации в скрипте.`
+        "Стартовая точка для пробы на коже: " +
+        main.name +
+        " (" +
+        main.brand +
+        ") — близко к вашему запросу по настроению и тегу «" +
+        main.tag +
+        "». Учитывая сценарий «" +
+        data.occasion +
+        "» и стиль «" +
+        data.style +
+        "», наносите экономно на пульс и наблюдайте развитие через 2–4 часа. Демо-режим: при подключении AI здесь появится персональная логика углубления."
       );
     }
 
-    /** Отрисовка HTML для списка похожих */
-    function renderSimilar(list) {
+    /** Атмосферный финальный абзац про «ароматический образ» */
+    function buildAromaticImage(data) {
+      const seedKey = [data.style, data.occasion, data.gender, "aroma"].join("|");
+      const lines = [
+        "Ваш гардероб создаёт образ уверенного, ухоженного и запоминающегося человека.",
+        "В невидимой драпировке этих нот читается вкус, выдержка и уважение к детали.",
+        "Вы собираете присутствие без крика — аромат становится вашей визитной карточкой на расстоянии вытянутой руки.",
+        "Это история о спокойной силе: когда шлейф опережает слова, но остаётся благородным.",
+        "Ваш выбор звучит как дорогой ткани костюм — ровно по фигуре, без лишнего блеска.",
+        "Такой парфюмерный образ говорит о дисциплине чувств и умении наслаждаться тишиной.",
+        "Вы строите память об себе через чистоту линии — и это редкое качество.",
+        "В сумме нот получается сцена: свет, полутон, финал — как хорошо поставленный спектакль."
+      ];
+      const a = pickStable(lines, seedKey, "a");
+      const b = pickStable(lines, seedKey + "2", "b");
+      if (a === b) return a;
+      return a + " " + b;
+    }
+
+    /** Отрисовка HTML для списка похожих (карточки luxury) */
+    function renderSimilar(list, data) {
       const ul = document.getElementById("outSimilar");
       ul.innerHTML = "";
       list.forEach(function (item, index) {
+        const enriched = enrichSimilarItem(item, data, index);
         const li = document.createElement("li");
         li.className = "perfume-item";
         li.innerHTML =
-          '<span class="perfume-num">' + (index + 1) + "</span>" +
-          "<div><strong>" + escapeHtml(item.name) + "</strong>" +
-          "<small>" + escapeHtml(item.brand) + " · " + escapeHtml(item.note) + "</small></div>";
+          '<span class="perfume-num">' +
+          (index + 1) +
+          "</span>" +
+          '<div class="perfume-head">' +
+          '<span class="perfume-brand">' +
+          escapeHtml(enriched.brand) +
+          "</span>" +
+          '<span class="tag-pill">' +
+          escapeHtml(enriched.tag) +
+          "</span>" +
+          "<h4 class=\"perfume-name\">" +
+          escapeHtml(enriched.name) +
+          "</h4></div>" +
+          '<p class="perfume-blurb">' +
+          escapeHtml(enriched.desc) +
+          "</p>" +
+          '<div class="perfume-meta">' +
+          '<div class="meta-row"><strong>Чем похож</strong>' +
+          escapeHtml(enriched.similarText) +
+          "</div>" +
+          '<div class="meta-row"><strong>Чем отличается</strong>' +
+          escapeHtml(enriched.differentText) +
+          "</div>" +
+          '<div class="meta-row"><strong>Когда носить</strong>' +
+          escapeHtml(enriched.whenText) +
+          "</div></div>";
         ul.appendChild(li);
       });
     }
@@ -792,9 +1252,80 @@
         div.innerHTML =
           '<div class="occ">' + escapeHtml(w.label) + "</div>" +
           "<strong>" + escapeHtml(w.name) + "</strong>" +
-          "<div><small>" + escapeHtml(w.brand) + " — " + escapeHtml(w.hint) + "</small></div>";
+          '<div><small style="color:var(--text-muted)">' +
+          escapeHtml(w.brand) +
+          " — " +
+          escapeHtml(w.hint) +
+          "</small></div>";
         grid.appendChild(div);
       });
+    }
+
+    /** Собирает один текстовый блок для буфера обмена */
+    function composePlainRecommendation(data, analysisParts, similar, wardrobe, finalText, aromaText) {
+      let t = "ПАРФЮМЕРНЫЙ AI-ЭКСПЕРТ — подборка\n\n";
+      t += "—— АНАЛИЗ АРОМАТА ——\n";
+      t += analysisParts.leadPlain + "\n\n";
+      t += "Настроение: " + analysisParts.mood + "\n";
+      t += "Характер: " + analysisParts.character + "\n";
+      t += "Сезон: " + analysisParts.season + "\n";
+      t += "Шлейф: " + analysisParts.trail + "\n";
+      t += "Стойкость: " + analysisParts.longevity + "\n";
+      t += "Образ: подойдёт " + analysisParts.persona + ".\n\n";
+      t += "—— 10 ПОХОЖИХ АРОМАТОВ ——\n";
+      similar.forEach(function (item, i) {
+        const e = enrichSimilarItem(item, data, i);
+        t += (i + 1) + ". " + e.brand + " — " + e.name + " [" + e.tag + "]\n";
+        t += "   " + e.desc + "\n";
+        t += "   Похож: " + e.similarText + "\n";
+        t += "   Отличие: " + e.differentText + "\n";
+        t += "   Когда: " + e.whenText + "\n\n";
+      });
+      t += "—— ПАРФЮМЕРНЫЙ ГАРДЕРОБ ——\n";
+      wardrobe.forEach(function (w) {
+        t += w.label + ": " + w.brand + " — " + w.name + " (" + w.hint + ")\n";
+      });
+      t += "\n—— ИТОГОВАЯ РЕКОМЕНДАЦИЯ ——\n" + finalText + "\n\n";
+      t += "—— ВАШ АРОМАТИЧЕСКИЙ ОБРАЗ ——\n" + aromaText + "\n";
+      return t;
+    }
+
+    /** Показ всплывающего сообщения (копирование и подсказки) */
+    function showToastMessage(message) {
+      const toast = document.getElementById("copyToast");
+      toast.textContent = message;
+      toast.setAttribute("aria-hidden", "false");
+      toast.classList.add("visible");
+      window.clearTimeout(showToastMessage._t);
+      showToastMessage._t = window.setTimeout(function () {
+        toast.classList.remove("visible");
+        toast.setAttribute("aria-hidden", "true");
+      }, 2600);
+    }
+
+    /** Показ тоста после успешного копирования */
+    function showCopyToast() {
+      showToastMessage("Рекомендация скопирована");
+    }
+
+    /** Копирование в буфер: современный API + запасной вариант для старых браузеров */
+    function copyTextToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+      } finally {
+        document.body.removeChild(ta);
+      }
+      return Promise.resolve();
     }
 
     /*
@@ -818,18 +1349,54 @@
       };
 
       const similar = pickSimilar(data);
-      const analysis = buildAnalysis(data);
+      const analysisParts = buildExpertAnalysis(data);
       const wardrobe = buildWardrobe(data);
       const finalText = buildFinal(data, similar);
+      const aromaText = buildAromaticImage(data);
 
-      document.getElementById("outAnalysis").innerHTML = "<p style='margin:0'>" + escapeHtml(analysis) + "</p>";
-      renderSimilar(similar);
+      document.getElementById("outAnalysis").innerHTML = renderAnalysisHTML(analysisParts);
+      renderSimilar(similar, data);
       renderWardrobe(wardrobe);
       document.getElementById("outFinal").innerHTML = "<p style='margin:0'>" + escapeHtml(finalText) + "</p>";
+      document.getElementById("outAromaImage").innerHTML =
+        '<p class="aroma-text">' + escapeHtml(aromaText) + "</p>";
+
+      lastPlainRecommendation = composePlainRecommendation(data, analysisParts, similar, wardrobe, finalText, aromaText);
 
       const results = document.getElementById("results");
       results.classList.add("visible");
       results.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    /* Очистка полей анкеты и скрытие блока результатов */
+    document.getElementById("clearFormBtn").addEventListener("click", function () {
+      const form = document.getElementById("perfumeForm");
+      form.reset();
+      document.querySelector('input[name="gender"][value="женский"]').checked = true;
+      lastPlainRecommendation = "";
+      const results = document.getElementById("results");
+      results.classList.remove("visible");
+      document.getElementById("outAnalysis").innerHTML = "";
+      document.getElementById("outSimilar").innerHTML = "";
+      document.getElementById("outWardrobe").innerHTML = "";
+      document.getElementById("outFinal").innerHTML = "";
+      document.getElementById("outAromaImage").innerHTML = "";
+    });
+
+    /* Копирование всей рекомендации одним нажатием */
+    document.getElementById("copyRecBtn").addEventListener("click", function () {
+      if (!lastPlainRecommendation) {
+        showToastMessage("Сначала получите подборку");
+        return;
+      }
+      copyTextToClipboard(lastPlainRecommendation).then(
+        function () {
+          showCopyToast();
+        },
+        function () {
+          showToastMessage("Не удалось скопировать");
+        }
+      );
     });
   </script>
 </body>
