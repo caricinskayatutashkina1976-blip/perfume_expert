@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- Кодировка и масштабирование на мобильных -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Парфюмерный AI-эксперт</title>
+  <style>
+    /*
+      === CSS-переменные ===
+      Здесь хранятся цвета для светлой и тёмной темы.
+      JavaScript переключает атрибут data-theme на <html>, и меняются значения переменных.
+    */
+    :root {
+      --bg: #f5f0e8;
+      --bg-card: #faf7f2;
+      --text: #1a1a1a;
+      --text-muted: #5c5348;
+      --accent: #b8860b;
+      --accent-soft: rgba(184, 134, 11, 0.15);
+      --border: rgba(26, 26, 26, 0.08);
+      --shadow: 0 8px 32px rgba(26, 26, 26, 0.08);
+      --shadow-hover: 0 12px 40px rgba(26, 26, 26, 0.12);
+      --gold-gradient: linear-gradient(135deg, #c9a227 0%, #8b6914 50%, #d4af37 100%);
+      --header-gradient: linear-gradient(180deg, #faf7f2 0%, #f0e8dc 100%);
+    }
+
+    [data-theme="dark"] {
+      --bg: #12100e;
+      --bg-card: #1c1814;
+      --text: #f0ebe3;
+      --text-muted: #a89888;
+      --accent: #d4af37;
+      --accent-soft: rgba(212, 175, 55, 0.12);
+      --border: rgba(240, 235, 227, 0.08);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+      --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.55);
+      --gold-gradient: linear-gradient(135deg, #e8c547 0%, #a67c00 50%, #f0d060 100%);
+      --header-gradient: linear-gradient(180deg, #1c1814 0%, #12100e 100%);
+    }
+
+    /* Сброс отступов и плавная смена темы */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+
+    /* Вспомогательный шрифт для кнопок и форм */
+    .sans {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* --- Шапка сайта --- */
+    .site-header {
+      background: var(--header-gradient);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+
+    .brand p {
+      margin: 0.35rem 0 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 28rem;
+    }
+
+    /* Кнопка переключения темы */
+    .theme-toggle {
+      font: inherit;
+      font-family: system-ui, sans-serif;
+      font-size: 0.8rem;
+      padding: 0.55rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .theme-toggle:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Контейнер ограничивает ширину контента */
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    /* Главный экран (hero) */
+    .hero {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: system-ui, sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h2 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 36rem;
+      margin: 0 auto 1.75rem;
+    }
+
+    .btn-primary {
+      font-family: system-ui, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.9rem 2rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #1a1208;
+      background: var(--gold-gradient);
+      box-shadow: 0 4px 20px rgba(184, 134, 11, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(184, 134, 11, 0.45);
+    }
+
+    /* Секция формы скрыта до нажатия «Подобрать аромат» */
+    .form-section {
+      display: none;
+    }
+
+    .form-section.visible {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 400;
+      margin: 0 0 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Карточка формы */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1.1rem;
+    }
+
+    @media (min-width: 600px) {
+      .form-grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-family: system-ui, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.02em;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      font-family: system-ui, sans-serif;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Радио-кнопки: стилизованные «пилюли» */
+    .radio-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .radio-pill {
+      position: relative;
+    }
+
+    .radio-pill input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-pill span {
+      display: inline-block;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-family: system-ui, sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .radio-pill input:checked + span {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .submit-wrap {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    /* Блок результатов */
+    .results {
+      display: none;
+      margin-top: 2.5rem;
+    }
+
+    .results.visible {
+      display: block;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .result-block {
+      margin-bottom: 2rem;
+    }
+
+    .result-block h3 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--accent);
+      margin: 0 0 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: system-ui, sans-serif;
+      font-size: 0.75rem;
+    }
+
+    .analysis-box {
+      padding: 1.25rem;
+      border-radius: 14px;
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      font-size: 1rem;
+    }
+
+    /* Список из 10 ароматов */
+    .perfume-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .perfume-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+    }
+
+    .perfume-num {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1a1208;
+      background: var(--gold-gradient);
+    }
+
+    .perfume-item strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .perfume-item small {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Сетка гардероба */
+    .wardrobe-grid {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    @media (min-width: 640px) {
+      .wardrobe-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .wardrobe-card {
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+    }
+
+    .wardrobe-card .occ {
+      font-family: system-ui, sans-serif;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .final-rec {
+      padding: 1.5rem;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      box-shadow: var(--shadow-hover);
+      font-size: 1.05rem;
+    }
+
+    /* Автор */
+    .author {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .author h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.15rem;
+      font-weight: 400;
+    }
+
+    .author p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 32rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <!-- Шапка: название, подзаголовок, переключение темы -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1>Парфюмерный AI-эксперт</h1>
+        <p>Подбор ароматов, похожих направлений и парфюмерного гардероба</p>
+      </div>
+      <!-- type="button" чтобы не отправлять форму, если кнопка окажется внутри form -->
+      <button type="button" class="theme-toggle" id="themeBtn" aria-label="Переключить тему">
+        Тёмная тема
+      </button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Главный экран: описание и вход в сценарий -->
+    <section class="hero" id="hero">
+      <span class="hero-badge">Демо-консультант</span>
+      <h2>Ваш персональный подбор в духе luxury-бутика</h2>
+      <p class="hero-desc">
+        Опишите любимый аромат, бренд или пирамиду нот — и получите структурированный ответ:
+        анализ, десять направлений для знакомства и парфюмерный гардероб под разные случаи жизни.
+        Сейчас работает демонстрационная логика без подключения к нейросети.
+      </p>
+      <button type="button" class="btn-primary sans" id="openFormBtn">Подобрать аромат</button>
+    </section>
+
+    <!-- Форма: изначально скрыта, показывается по клику -->
+    <section class="form-section" id="formSection" aria-hidden="true">
+      <h2 class="section-title">Анкета для подбора</h2>
+      <form id="perfumeForm" class="card" novalidate>
+        <div class="form-grid">
+          <!-- Гендер: три варианта через radio -->
+          <div>
+            <label>Гендер</label>
+            <div class="radio-row" id="genderRow">
+              <label class="radio-pill"><input type="radio" name="gender" value="женский" checked><span>Женский</span></label>
+              <label class="radio-pill"><input type="radio" name="gender" value="мужской"><span>Мужской</span></label>
+              <label class="radio-pill"><input type="radio" name="gender" value="унисекс"><span>Унисекс</span></label>
+            </div>
+          </div>
+
+          <div class="form-grid two">
+            <div>
+              <label for="favName">Название любимого аромата</label>
+              <input type="text" id="favName" name="favName" placeholder="Например: Shalimar">
+            </div>
+            <div>
+              <label for="brand">Бренд</label>
+              <input type="text" id="brand" name="brand" placeholder="Например: Guerlain">
+            </div>
+          </div>
+
+          <div>
+            <label for="topNotes">Верхние ноты</label>
+            <input type="text" id="topNotes" name="topNotes" placeholder="Цитрус, бергамот…">
+          </div>
+          <div>
+            <label for="heartNotes">Сердце аромата</label>
+            <input type="text" id="heartNotes" name="heartNotes" placeholder="Ирис, роза…">
+          </div>
+          <div>
+            <label for="baseNotes">База аромата</label>
+            <input type="text" id="baseNotes" name="baseNotes" placeholder="Ваниль, сандал…">
+          </div>
+
+          <div>
+            <label for="occasion">Для чего нужен аромат</label>
+            <select id="occasion" name="occasion">
+              <option value="работа">Работа</option>
+              <option value="свидание">Свидание</option>
+              <option value="путешествие">Путешествие</option>
+              <option value="прогулки">Прогулки</option>
+              <option value="мероприятие">Мероприятие</option>
+              <option value="деловые встречи">Деловые встречи</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="style">Предпочитаемый стиль</label>
+            <select id="style" name="style">
+              <option value="свежий">Свежий</option>
+              <option value="сладкий">Сладкий</option>
+              <option value="древесный">Древесный</option>
+              <option value="мускусный">Мускусный</option>
+              <option value="цветочный">Цветочный</option>
+              <option value="гурманский">Гурманский</option>
+              <option value="кожаный">Кожаный</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="submit-wrap">
+          <button type="submit" class="btn-primary sans">Получить подборку</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Результаты: заполняются скриптом после отправки формы -->
+    <section class="results" id="results" aria-live="polite">
+      <h2 class="section-title">Ваша подборка</h2>
+
+      <div class="result-block">
+        <h3>Анализ аромата</h3>
+        <div class="analysis-box card" id="outAnalysis"></div>
+      </div>
+
+      <div class="result-block">
+        <h3>10 похожих ароматов</h3>
+        <ul class="perfume-list" id="outSimilar"></ul>
+      </div>
+
+      <div class="result-block">
+        <h3>Парфюмерный гардероб</h3>
+        <div class="wardrobe-grid" id="outWardrobe"></div>
+      </div>
+
+      <div class="result-block">
+        <h3>Итоговая рекомендация</h3>
+        <div class="final-rec" id="outFinal"></div>
+      </div>
+    </section>
+
+    <!-- Блок об авторе сервиса -->
+    <section class="author">
+      <h3>Автор сервиса</h3>
+      <p>
+        <strong>Наталья Царицинская</strong> — создаю AI-ассистентов, ботов и мини-сервисы для бизнеса, экспертов и продаж.
+      </p>
+    </section>
+
+    <p class="footer-note sans">Демо-версия · данные генерируются локально в браузере</p>
+  </main>
+
+  <script>
+    /*
+      === ТЕМА (светлая / тёмная) ===
+      Храним выбор в localStorage, чтобы при следующем визите тема сохранилась.
+    */
+    const THEME_KEY = "perfume-ai-theme";
+
+    function getStoredTheme() {
+      return localStorage.getItem(THEME_KEY);
+    }
+
+    function applyTheme(theme) {
+      // theme: "light" или "dark"
+      document.documentElement.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      const btn = document.getElementById("themeBtn");
+      btn.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+      localStorage.setItem(THEME_KEY, theme);
+    }
+
+    function initTheme() {
+      const saved = getStoredTheme();
+      if (saved === "dark" || saved === "light") {
+        applyTheme(saved);
+        return;
+      }
+      // Если пользователь в системе предпочитает тёмный режим — подстраиваемся
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        applyTheme("dark");
+      } else {
+        applyTheme("light");
+      }
+    }
+
+    document.getElementById("themeBtn").addEventListener("click", function () {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      applyTheme(isDark ? "light" : "dark");
+    });
+
+    initTheme();
+
+    /*
+      === Показать форму по кнопке «Подобрать аромат» ===
+      Плавно прокручиваем к форме для удобства на телефоне.
+    */
+    document.getElementById("openFormBtn").addEventListener("click", function () {
+      const section = document.getElementById("formSection");
+      section.classList.add("visible");
+      section.setAttribute("aria-hidden", "false");
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    /*
+      === Демо-данные: шаблоны для «похожих» ароматов и гардероба ===
+      В реальном проекте сюда пришёл бы ответ API.
+    */
+    const SIMILAR_POOL = [
+      { name: "Samsara", brand: "Guerlain", note: "пудровый сандал и специи" },
+      { name: "Coco Mademoiselle", brand: "Chanel", note: "цитрус, пачули, роза" },
+      { name: "La Nuit de L'Homme", brand: "Yves Saint Laurent", note: "лаванда, кардамон, ваниль" },
+      { name: "Terre d'Hermès", brand: "Hermès", note: "апельсин, минералы, древесина" },
+      { name: "Black Orchid", brand: "Tom Ford", note: "трюфель, шоколад, орхидея" },
+      { name: "Bleu de Chanel", brand: "Chanel", note: "цитрус, ладан, кедр" },
+      { name: "J'adore", brand: "Dior", note: "юланг, жасмин, фрукты" },
+      { name: "Sauvage", brand: "Dior", note: "бергамот, амброксан, перец" },
+      { name: "Libre", brand: "Yves Saint Laurent", note: "лаванда, апельсин, ваниль" },
+      { name: "Angel", brand: "Mugler", note: "пачули, карамель, пачули" },
+      { name: "Acqua di Gio", brand: "Giorgio Armani", note: "морской воздух, жасмин, мускус" },
+      { name: "Flowerbomb", brand: "Viktor & Rolf", note: "роза, фрезия, пачули" },
+      { name: "Aventus", brand: "Creed", note: "ананас, дым, дубовый мох" },
+      { name: "Narciso Rodriguez For Her", brand: "Narciso Rodriguez", note: "мускус, роза, кашемировое дерево" },
+      { name: "L'Interdit", brand: "Givenchy", note: "тубероза, жасмин, ветивер" },
+      { name: "Good Girl", brand: "Carolina Herrera", note: "миндаль, какао, тонка" },
+      { name: "Spicebomb", brand: "Viktor & Rolf", note: "перец, табак, кожа" },
+      { name: "Oud Wood", brand: "Tom Ford", note: "oud, сандал, ваниль" },
+      { name: "Miss Dior", brand: "Dior", note: "роза, пачули, мускус" },
+      { name: "Allure Homme Sport", brand: "Chanel", note: "мандарин, кедр, тонка" },
+      { name: "Mon Guerlain", brand: "Guerlain", note: "лаванда, ваниль, сандал" },
+      { name: "Gentle Fluidity Gold", brand: "Maison Francis Kurkdjian", note: "мускус, ваниль, корица" },
+      { name: "Baccarat Rouge 540", brand: "Maison Francis Kurkdjian", note: "шафран, амброксан, кедр" },
+      { name: "Philosykos", brand: "Diptyque", note: "инжир, листья, древесина" },
+      { name: "Gypsy Water", brand: "Byredo", note: "сосна, сандал, ваниль" }
+    ];
+
+    const WARDROBE_LABELS = [
+      { key: "work", label: "Аромат для работы" },
+      { key: "business", label: "Аромат для деловых встреч" },
+      { key: "walk", label: "Аромат для прогулок" },
+      { key: "travel", label: "Аромат для путешествий" },
+      { key: "event", label: "Аромат для мероприятий" }
+    ];
+
+    /** Простая «хэш-функция» от строки — даёт стабильное число для выбора вариантов */
+    function hashString(s) {
+      let h = 0;
+      for (let i = 0; i < s.length; i++) {
+        h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+      }
+      return Math.abs(h);
+    }
+
+    /** Перемешивает массив на основе seed (детерминированно для одних и тех же входных данных) */
+    function shuffleWithSeed(arr, seed) {
+      const copy = arr.slice();
+      let x = seed;
+      for (let i = copy.length - 1; i > 0; i--) {
+        x = (x * 1103515245 + 12345) & 0x7fffffff;
+        const j = x % (i + 1);
+        const t = copy[i];
+        copy[i] = copy[j];
+        copy[j] = t;
+      }
+      return copy;
+    }
+
+    /** Вступление к анализу с правильным согласованием по гендеру */
+    function genderAnalysisOpening(gender, ref, brandSuffix) {
+      let niche;
+      if (gender === "мужской") niche = "В мужской нише";
+      else if (gender === "унисекс") niche = "В унисекс-сегменте";
+      else niche = "В женской нише";
+      return niche + " референс «" + ref + "»" + brandSuffix + " воспринимается";
+    }
+
+    /** Собирает текст анализа из полей формы и шаблонов */
+    function buildAnalysis(data) {
+      const scentLine = [data.topNotes, data.heartNotes, data.baseNotes].filter(Boolean).join(" → ");
+      const ref = data.favName || "ваш эталонный образ";
+      const br = data.brand ? " (" + data.brand + ")" : "";
+      const style = data.style;
+      const occ = data.occasion;
+      const opening = genderAnalysisOpening(data.gender, ref, br);
+
+      let pyramid = "";
+      if (scentLine) {
+        pyramid = `Пирамида, которую вы описали (${scentLine}), задаёт характер: композиция читается в парадигме «${style}» с акцентом на сценарий «${occ}». `;
+      } else {
+        pyramid = `Без явной пирамиды мы опираемся на стиль «${style}» и сценарий «${occ}» — этого достаточно, чтобы наметить вектор. `;
+      }
+
+      return (
+        opening + ` в ключе стиля «${style}». ` +
+        pyramid +
+        `В таком профиле важны баланс стойкости и дистанции: для ${occ} лучше выбирать композиции с читаемым силуэтом и без «шума» в базе. ` +
+        `Ниже — десять направлений для теста на коже и гардероб под ключевые ситуации — от офиса до вечера.`
+      );
+    }
+
+    /** Возвращает 10 уникальных позиций из пула (с учётом seed от формы) */
+    function pickSimilar(data) {
+      const seed = hashString(
+        [data.favName, data.brand, data.style, data.gender, data.occasion].join("|")
+      );
+      const shuffled = shuffleWithSeed(SIMILAR_POOL, seed);
+      return shuffled.slice(0, 10);
+    }
+
+    /** Карточки гардероба — берём 5 разных ароматов из того же перемешанного пула */
+    function buildWardrobe(data) {
+      const seed = hashString([data.brand, data.baseNotes, "wardrobe"].join("|"));
+      const shuffled = shuffleWithSeed(SIMILAR_POOL, seed + 7);
+      const picks = shuffled.slice(0, 5);
+      return WARDROBE_LABELS.map(function (item, i) {
+        const p = picks[i] || SIMILAR_POOL[i];
+        return {
+          label: item.label,
+          name: p.name,
+          brand: p.brand,
+          hint: p.note
+        };
+      });
+    }
+
+    function buildFinal(data, similarFirst) {
+      const main = similarFirst[0];
+      return (
+        `Стартовая точка для пробы: ${main.name} (${main.brand}) — близко к вашему запросу по настроению. ` +
+        `Учитывая сценарий «${data.occasion}» и стиль «${data.style}», наносите экономно на пульс и проверяйте развитие через 2–4 часа. ` +
+        `Если захотите углубить подбор с реальным AI — подключите API и замените функции генерации в скрипте.`
+      );
+    }
+
+    /** Отрисовка HTML для списка похожих */
+    function renderSimilar(list) {
+      const ul = document.getElementById("outSimilar");
+      ul.innerHTML = "";
+      list.forEach(function (item, index) {
+        const li = document.createElement("li");
+        li.className = "perfume-item";
+        li.innerHTML =
+          '<span class="perfume-num">' + (index + 1) + "</span>" +
+          "<div><strong>" + escapeHtml(item.name) + "</strong>" +
+          "<small>" + escapeHtml(item.brand) + " · " + escapeHtml(item.note) + "</small></div>";
+        ul.appendChild(li);
+      });
+    }
+
+    /** Экранирование текста пользователя при вставке в HTML (безопасность) */
+    function escapeHtml(text) {
+      if (!text) return "";
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderWardrobe(items) {
+      const grid = document.getElementById("outWardrobe");
+      grid.innerHTML = "";
+      items.forEach(function (w) {
+        const div = document.createElement("div");
+        div.className = "wardrobe-card";
+        div.innerHTML =
+          '<div class="occ">' + escapeHtml(w.label) + "</div>" +
+          "<strong>" + escapeHtml(w.name) + "</strong>" +
+          "<div><small>" + escapeHtml(w.brand) + " — " + escapeHtml(w.hint) + "</small></div>";
+        grid.appendChild(div);
+      });
+    }
+
+    /*
+      === Отправка формы ===
+      preventDefault() отменяет перезагрузку страницы (стандартное поведение form).
+    */
+    document.getElementById("perfumeForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const genderEl = form.querySelector('input[name="gender"]:checked');
+      const data = {
+        gender: genderEl ? genderEl.value : "унисекс",
+        favName: form.favName.value.trim(),
+        brand: form.brand.value.trim(),
+        topNotes: form.topNotes.value.trim(),
+        heartNotes: form.heartNotes.value.trim(),
+        baseNotes: form.baseNotes.value.trim(),
+        occasion: form.occasion.value,
+        style: form.style.value
+      };
+
+      const similar = pickSimilar(data);
+      const analysis = buildAnalysis(data);
+      const wardrobe = buildWardrobe(data);
+      const finalText = buildFinal(data, similar);
+
+      document.getElementById("outAnalysis").innerHTML = "<p style='margin:0'>" + escapeHtml(analysis) + "</p>";
+      renderSimilar(similar);
+      renderWardrobe(wardrobe);
+      document.getElementById("outFinal").innerHTML = "<p style='margin:0'>" + escapeHtml(finalText) + "</p>";
+
+      const results = document.getElementById("results");
+      results.classList.add("visible");
+      results.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  </script>
+</body>
+</html>
